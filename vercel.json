@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server/server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "client/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/socket.io/(.*)",
+      "dest": "/server/server.js"
+    },
+    {
+      "src": "^/static/(.*)",
+      "dest": "/client/static/$1"
+    },
+    {
+      "src": "^/assets/(.*)",
+      "dest": "/client/assets/$1"
+    },
+    {
+      "src": "^/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot))$",
+      "dest": "/client/$1"
+    },
+    {
+      "src": "^/.*",
+      "dest": "/client/index.html"
+    }
+  ]
+}
