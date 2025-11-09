@@ -1,13 +1,36 @@
 class Network {
     constructor() {
-        // Connect to the current host for WebSocket
-        this.socket = io(window.location.origin, {
-            path: '/socket.io/',
+        console.log('Initializing WebSocket connection...');
+        
+        // Configure socket with explicit WebSocket transport
+        this.socket = io({
+            path: '/socket.io',
             transports: ['websocket'],
-            upgrade: false
+            upgrade: false,
+            reconnection: true,
+            reconnectionAttempts: 10,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax: 5000,
+            timeout: 20000,
+            forceNew: true
         });
         
-        console.log('Connecting to WebSocket at:', window.location.origin);
+        // Log all socket events for debugging
+        const events = ['connect', 'connect_error', 'connect_timeout', 'reconnect', 'reconnect_attempt', 'reconnecting', 'reconnect_error', 'reconnect_failed', 'disconnect', 'error'];
+        events.forEach(event => {
+            this.socket.on(event, (data) => {
+                console.log(`Socket event: ${event}`, data || '');
+            });
+        });
+        
+        // Log when we receive data from server
+        this.socket.on('UPDATE_CANVAS', (data) => {
+            console.log('Received UPDATE_CANVAS:', data);
+        });
+        
+        this.socket.on('SET_STATE', (data) => {
+            console.log('Received SET_STATE:', data ? `Data length: ${data.length}` : 'No data');
+        });
     }
 
     // --- Emitters (Client -> Server) ---
