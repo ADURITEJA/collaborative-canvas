@@ -1,20 +1,16 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "*.{html,css,js,ico,png,jpg,jpeg,gif,svg,woff,woff2,ttf,eot}",
-      "use": "@vercel/static"
-    }
+    { "src": "server.js", "use": "@vercel/node" },
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "style.css", "use": "@vercel/static" },
+    { "src": "*.js", "use": "@vercel/static" },
+    { "src": "*.(ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/socket.io/(.*)", "dest": "/server.js" },
-    { "src": "/(.*)", "dest": "/index.html" }
-  ],
-  "rewrites": [
-    { "source": "/((?!.*\\..*).*)", "destination": "/" }
+
+    { "src": "/(.*\\..+)", "dest": "/$1" },
+    { "src": "/.*", "dest": "/index.html" }
   ]
 }
