@@ -24,16 +24,13 @@ const io = new Server(server, {
 // This define the port to run on
 const PORT = process.env.PORT || 3000;
 
-// Serve static files from client directory
-const clientPath = path.join(__dirname, '..', 'client');
+// Serve static files from root
+app.use(express.static(__dirname));
 
-// In production, serve static files through Vercel's static hosting
-if (process.env.NODE_ENV !== 'production') {
-  app.use(express.static(clientPath));
-  app.get('/', (req, res) => {
-    res.sendFile(path.join(clientPath, 'index.html'));
-  });
-}
+// Serve index.html for all routes to support client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // Health check endpoint
 app.get('/health', (req, res) => {

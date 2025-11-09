@@ -2,26 +2,16 @@
   "version": 2,
   "builds": [
     {
-      "src": "server/server.js",
+      "src": "server.js",
       "use": "@vercel/node"
     },
     {
-      "src": "client/**",
+      "src": "*.{html,css,js,ico,png,jpg,jpeg,gif,svg,woff,woff2,ttf,eot}",
       "use": "@vercel/static"
     }
   ],
-  "rewrites": [
-    { "source": "/socket.io/(.*)", "destination": "/server/server.js" },
-    { "source": "/(.*)", "destination": "/client/$1" }
-  ],
-  "headers": [
-    {
-      "source": "/socket.io/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "X-Requested-With, Content-Type" }
-      ]
-    }
+  "routes": [
+    { "src": "/socket.io/(.*)", "dest": "/server.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
